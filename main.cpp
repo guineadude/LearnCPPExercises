@@ -1,49 +1,39 @@
 
 
 #include <iostream>
-#include <unordered_set>
+
 #include <vector>
 using namespace std;
-#include <iostream>
-#include <numeric>
 #include <unordered_set>
-
+#include <unordered_map>
 class Solution
 {
 public:
-    vector<vector<int>> findDifference(vector<int> &nums1, vector<int> &nums2)
+    bool uniqueOccurrences(vector<int> &arr)
     {
-        unordered_set<int> set1{nums1.begin(), nums1.end()};
-        unordered_set<int> set2{nums2.begin(), nums2.end()};
-
-        vector<int> diff1{};
-        vector<int> diff2{};
-
-        diff1.reserve(set1.size());
-        diff2.reserve(set2.size());
-
-        for (const auto &value : set1)
+        unordered_map<int, int> frequencyMap{};
+        for (const auto num : arr)
         {
-            if (!set2.contains(value))
-            {
-                diff1.push_back(value);
-            }
+            ++frequencyMap[num];
         }
 
-        for (const auto &value : set2)
+        unordered_set<int> seenFrequencies{};
+        seenFrequencies.reserve(frequencyMap.size());
+        for (const auto [_, value] : frequencyMap)
         {
-            if (!set1.contains(value))
+            if (seenFrequencies.contains(value))
             {
-                diff2.push_back(value);
+                return false;
             }
+            seenFrequencies.emplace(value);
         }
-        return {diff1, diff2};
+        return true;
     }
 };
+
 int main()
 {
     Solution solution;
-    vector<int> nums{-4, -3, -2, -1, 4, 3, 2};
-    cout << solution.largestAltitude(nums) << endl;
+
     return 0;
 }
