@@ -3,46 +3,44 @@
 using namespace std;
 #include <iostream>
 #include <numeric>
+#include <unordered_set>
 
 class Solution
 {
 public:
-    double findMaxAverage(vector<int> &nums, int k)
+    vector<vector<int>> findDifference(vector<int> &nums1, vector<int> &nums2)
     {
-        auto lw{0uz};
-        auto rw{lw + static_cast<size_t>(k)};
-        int highestSum{};
-        auto numsSize{nums.size()};
+        unordered_set<int> set1{nums1.begin(), nums1.end()};
+        unordered_set<int> set2{nums2.begin(), nums2.end()};
 
-        for (auto i{0uz}; i < rw; ++i)
+        vector<int> diff1{};
+        vector<int> diff2{};
+
+        diff1.reserve(set1.size());
+        diff2.reserve(set2.size());
+
+        for (const auto &value : set1)
         {
-            highestSum += nums[i];
-        }
-
-        int lastSum = highestSum;
-
-        for (; rw < numsSize; ++rw)
-        {
-            int prevWindowSum = (lastSum - nums[lw]);
-            int currentSum = (prevWindowSum + nums[rw]);
-
-            if (currentSum > highestSum)
+            if (!set2.contains(value))
             {
-                highestSum = currentSum;
+                diff1.push_back(value);
             }
-
-            ++lw;
-            lastSum = currentSum;
         }
 
-        return static_cast<double>(highestSum) / k;
+        for (const auto &value : set2)
+        {
+            if (!set1.contains(value))
+            {
+                diff2.push_back(value);
+            }
+        }
+        return {diff1, diff2};
     }
 };
-
 int main()
 {
     Solution solution;
-    vector<int> nums{5};
-    cout << solution.findMaxAverage(nums, 1) << endl;
+    vector<int> nums{-4, -3, -2, -1, 4, 3, 2};
+    cout << solution.largestAltitude(nums) << endl;
     return 0;
 }
